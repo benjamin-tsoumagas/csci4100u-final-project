@@ -11,15 +11,13 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  //Switches page to the home screen
   startApp() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MyHomePage()));
   }
 
-  startTimer() async {
-    return Timer(const Duration(seconds: 3), startApp());
-  }
-
+  //Sets the page to switch after 3 seconds
   @override
   void initState() {
     super.initState();
