@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "114876035163",
+    "project_id": "csci4100u-final-project",
+    "storage_bucket": "csci4100u-final-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114876035163:android:40cfe57a7526c491cecf7e",
+        "android_client_info": {
+          "package_name": "com.example.student_utility_tool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114876035163-sfh3cun8uscgt27q6u3ig5740269gcns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlj-CX4mDg96Bhhx0BWyfMOJFmmMWx2s0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114876035163-sfh3cun8uscgt27q6u3ig5740269gcns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
