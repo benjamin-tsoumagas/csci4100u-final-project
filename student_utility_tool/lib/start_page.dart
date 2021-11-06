@@ -21,7 +21,7 @@ class _StartPageState extends State<StartPage> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 5), () {
       startApp();
     });
   }
@@ -30,13 +30,16 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: SafeArea(
-          child: Stack(
-            children: [
-              //TODO: Insert background image here
-
+        child: Expanded(
+          child: SafeArea(
+            child: Container(
+              //Background image, loads after delay and not full width
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/startBackground.jpg"),
+                      fit: BoxFit.cover)),
               //Start page content
-              Column(
+              child: Column(
                 children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 1.25,
@@ -64,7 +67,7 @@ class _StartPageState extends State<StartPage> {
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
