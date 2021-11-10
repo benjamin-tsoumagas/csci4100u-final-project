@@ -1,0 +1,70 @@
+// @dart=2.9
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class StreamBuilderWidget extends StatefulWidget {
+  const StreamBuilderWidget({Key key}) : super(key: key);
+
+  @override
+  _StreamBuilderWidgetState createState() => _StreamBuilderWidgetState();
+}
+
+class _StreamBuilderWidgetState extends State<StreamBuilderWidget> {
+  final users = FirebaseFirestore.instance.collection('user');
+  int _selectedIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: users.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        return Card(
+            child: ListView.separated(
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    child: ListTile(
+                      selected: false,
+                      tileColor: _selectedIndex == index ? Colors.blue : null,
+                      title: Text(snapshot.data.docs[index]['username']),
+                      subtitle: Text(snapshot.data.docs[index]['email']),
+                      trailing: IconButton(
+                          onPressed: () {
+                            _showAlertDialog(context);
+                          },
+                          icon: const Icon(Icons.delete)),
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) => Divider(
+                      height: 5,
+                      color: Colors.grey.shade200,
+                    ),
+                itemCount: snapshot.data.docs.length));
+      },
+    );
+  }
+
+  _showAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Warning"),
+            content: const Text("Are you sure you want to delete this user?"),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.pop(context, "Yes");
+              }, child: const Text("Yes")),
+              TextButton(onPressed: () {
+                Navigator.pop(context, "No");
+              }, child: const Text("No"))
+            ],
+          );
+        });
+  }
+}

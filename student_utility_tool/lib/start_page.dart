@@ -1,10 +1,10 @@
+// @dart=2.9
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:student_utility_tool/main.dart';
+import 'user_page.dart';
 
 class StartPage extends StatefulWidget {
-  const StartPage({Key? key}) : super(key: key);
+  const StartPage({Key key}) : super(key: key);
 
   @override
   State<StartPage> createState() => _StartPageState();
@@ -14,7 +14,7 @@ class _StartPageState extends State<StartPage> {
   //Switches page to the home screen
   startApp() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MyHomePage()));
+        context, MaterialPageRoute(builder: (context) => UserPage()));
   }
 
   //Sets the page to switch after 3 seconds
