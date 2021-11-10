@@ -12,6 +12,7 @@ class StreamBuilderWidget extends StatefulWidget {
 class _StreamBuilderWidgetState extends State<StreamBuilderWidget> {
   final users = FirebaseFirestore.instance.collection('user');
   int _selectedIndex = -1;
+  var documentID;
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +30,15 @@ class _StreamBuilderWidgetState extends State<StreamBuilderWidget> {
                       subtitle: Text(snapshot.data.docs[index]['email']),
                       trailing: IconButton(
                           onPressed: () {
-                            _showAlertDialog(context);
+                            setState(() {
+                              _showAlertDialog(context);
+                            });
                           },
                           icon: const Icon(Icons.delete)),
                       onTap: () {
                         setState(() {
                           _selectedIndex = index;
+                          documentID = snapshot.data.docs[index].id;
                         });
                       },
                     ),
@@ -57,14 +61,23 @@ class _StreamBuilderWidgetState extends State<StreamBuilderWidget> {
             title: const Text("Warning"),
             content: const Text("Are you sure you want to delete this user?"),
             actions: [
-              TextButton(onPressed: () {
-                Navigator.pop(context, "Yes");
-              }, child: const Text("Yes")),
-              TextButton(onPressed: () {
-                Navigator.pop(context, "No");
-              }, child: const Text("No"))
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, "Yes");
+                  },
+                  child: const Text("Yes")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, "No");
+                  },
+                  child: const Text("No"))
             ],
           );
-        });
+        }).then((value) {
+      if (value == "Yes") {
+        final users = FirebaseFirestore.instance.collection('user');
+        users.doc(documentID).delete();
+      }
+    });
   }
 }
