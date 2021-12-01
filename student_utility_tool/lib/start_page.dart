@@ -11,66 +11,59 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  //Switches page to the home screen
-  startApp() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => UserPage()));
-  }
-
-  //Sets the page to switch after 3 seconds
+  //Sets the page to switch after a delay
   @override
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () {
-      startApp();
+      setState(() {
+        startApp();
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       body: Center(
         child: Expanded(
-          child: SafeArea(
-            child: Container(
-              //Background image, loads after delay and not full width
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/startBackground.jpg"),
-                      fit: BoxFit.cover)),
-              //Start page content
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.25,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            //Start page content
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //Logo
+                SizedBox(
                     height: MediaQuery.of(context).size.height / 2,
-                    child: const FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text("Student's Utility Tool"),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: MediaQuery.of(context).size.height / 5,
-                    child: const FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text("Welcome!"),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.5,
-                    height: MediaQuery.of(context).size.height / 5,
-                    child: const FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text("Please wait for the app to load."),
-                    ),
-                  ),
-                ],
-              ),
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Image.asset('app_icon.png')),
+                //App title
+                SizedBox(
+                    height: MediaQuery.of(context).size.height / 8,
+                    child: const Text("Student's Utility Tool",
+                        style: TextStyle(fontSize: 60, color: Colors.grey))),
+                SizedBox(height: MediaQuery.of(context).size.height / 10),
+                //Indeterminate progress bar
+                progressBar()
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  //Switches page to the user login screen
+  startApp() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UserPage()));
+  }
+
+  //Creates a widget for the indeterminant loading bar
+  Widget progressBar() {
+    return const LinearProgressIndicator(
+        backgroundColor: Colors.grey, color: Colors.blue, minHeight: 10);
   }
 }
