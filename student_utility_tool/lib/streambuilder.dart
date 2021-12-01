@@ -19,6 +19,12 @@ class _StreamBuilderWidgetState extends State<StreamBuilderWidget> {
     return StreamBuilder(
       stream: users.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        //Error handling for if there are no users entered
+        if (!snapshot.hasData) {
+          return const Center(
+            child: Text("No Users"),
+          );
+        }
         return Card(
             child: ListView.separated(
                 itemBuilder: (BuildContext context, int index) {

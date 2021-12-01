@@ -89,17 +89,22 @@ class _UserPageState extends State<UserPage> {
                         const SizedBox(
                           height: 40,
                         ),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (formKey.currentState.validate()) {
-                                final users = FirebaseFirestore.instance
-                                    .collection('user');
-                                users.add(
-                                    {'username': usernameController.text, 'email': emailController.text});
-                                Navigator.pop(context);
-                              }
-                            },
-                            child: const Text("Create Account"))
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 50),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState.validate()) {
+                                  final users = FirebaseFirestore.instance
+                                      .collection('user');
+                                  users.add({
+                                    'username': usernameController.text,
+                                    'email': emailController.text
+                                  });
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text("Create Account")),
+                        )
                       ],
                     ),
                   ));
