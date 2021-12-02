@@ -43,7 +43,7 @@ class _StartPageState extends State<StartPage> {
                 SizedBox(
                     height: MediaQuery.of(context).size.height / 8,
                     child: const Text("Student's Utility Tool",
-                        style: TextStyle(fontSize: 60, color: Colors.grey))),
+                        style: TextStyle(fontSize: 35, color: Colors.grey))),
                 SizedBox(height: MediaQuery.of(context).size.height / 10),
                 //Indeterminate progress bar
                 progressBar()
@@ -58,7 +58,7 @@ class _StartPageState extends State<StartPage> {
   //Switches page to the user login screen
   startApp() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => UserPage()));
+        context, MaterialPageRoute(builder: (context) => const UserPage()));
   }
 
   //Creates a widget for the indeterminant loading bar
