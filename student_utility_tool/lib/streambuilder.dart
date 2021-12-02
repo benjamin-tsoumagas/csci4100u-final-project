@@ -1,4 +1,6 @@
 // @dart=2.9
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -43,6 +45,10 @@ class _StreamBuilderWidgetState extends State<StreamBuilderWidget> {
                           icon: const Icon(Icons.delete)),
                       onTap: () {
                         setState(() {
+                          if (_selectedIndex == index) {
+                            //Code to prompt password
+                            //If successful password, go to user home
+                          }
                           _selectedIndex = index;
                           documentID = snapshot.data.docs[index].id;
                         });
