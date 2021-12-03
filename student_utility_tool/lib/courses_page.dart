@@ -1,11 +1,15 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:student_utility_tool/navigation_drawer.dart';
+import 'global_content_holder.dart';
 
 class CoursesPage extends StatefulWidget {
   const CoursesPage({Key key}) : super(key: key);
 
-  final String title = "Student's Utility Tool";
+  final String email = "Student's Utility Tool";
+  final String userName = "";
+  final String password = "";
 
   @override
   State<CoursesPage> createState() => _CourseListState();
@@ -42,8 +46,7 @@ class _CourseListState extends State<CoursesPage> {
               ),
             );
           }
-          return Material(
-              child: Container(
+          return Container(
             height: containerHeight,
             color: colourStyle[(index % 2) * colourDiff + colourShift],
             child: Center(
@@ -54,7 +57,7 @@ class _CourseListState extends State<CoursesPage> {
                   child: Text('Testing') // course name \\
                   ),
             ),
-          ));
+          );
         });
   }
 
