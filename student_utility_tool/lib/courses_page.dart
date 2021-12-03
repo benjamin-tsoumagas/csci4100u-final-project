@@ -1,7 +1,7 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:student_utility_tool/navigation_drawer.dart';
+import 'navigation_drawer.dart';
 import 'global_content_holder.dart';
 
 class CoursesPage extends StatefulWidget {
@@ -41,8 +41,10 @@ class _CourseListState extends State<CoursesPage> {
                     },
                     child: SizedBox(
                         width: 100,
-                        child: Row(
-                            children: [Icon(Icons.add), Text('Add Course')]))),
+                        child: Row(children: const [
+                          Icon(Icons.add),
+                          Text('Add Course')
+                        ]))),
               ),
             );
           }
@@ -54,7 +56,7 @@ class _CourseListState extends State<CoursesPage> {
                   onTap: () {
                     // Bring to the course data page \\
                   },
-                  child: Text('Testing') // course name \\
+                  child: const Text('Testing') // course name \\
                   ),
             ),
           );
@@ -67,7 +69,7 @@ class _CourseListState extends State<CoursesPage> {
       appBar: AppBar(
         title: const Text("Courses"),
       ),
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavigationDrawerWidget(),
       body: getBodyContent(),
     );
   }

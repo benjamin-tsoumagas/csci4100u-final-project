@@ -1,15 +1,19 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'package:flutter/material.dart';
 import 'courses_page.dart';
 import 'home_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
+  const NavigationDrawerWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
         children: [
           //Header containing Student *picture, name, and email
-          DrawerHeader(
+          const DrawerHeader(
             child: Text("Drawer Header"),
           ),
           //Option to go to Home
@@ -24,7 +28,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             },
           ),
           //Option to go to Add Grades
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.insert_chart),
             title: Text("Add Grade"),
             trailing: Icon(Icons.chevron_right),
@@ -41,19 +45,19 @@ class NavigationDrawerWidget extends StatelessWidget {
             },
           ),
           //Option to go to Grade Calculator
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.calculate),
             title: Text("Grade Calculator"),
             trailing: Icon(Icons.chevron_right),
           ),
           //Option to go to Student Map
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.map),
             title: Text("Student Map"),
             trailing: Icon(Icons.chevron_right),
           ),
           //Option to go to Settings
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.settings),
             title: Text("Settings"),
           )

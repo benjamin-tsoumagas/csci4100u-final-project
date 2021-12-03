@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:student_utility_tool/home_page.dart';
+import 'home_page.dart';
 import 'global_content_holder.dart';
 
 class UserPage extends StatefulWidget {

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:student_utility_tool/start_page.dart';
+import 'start_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
