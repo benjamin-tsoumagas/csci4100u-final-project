@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'courses_page.dart';
 import 'home_page.dart';
+import 'map_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   const NavigationDrawerWidget({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HomePage(),
+                builder: (context) => const HomePage(),
               ));
             },
           ),
@@ -51,10 +52,15 @@ class NavigationDrawerWidget extends StatelessWidget {
             trailing: Icon(Icons.chevron_right),
           ),
           //Option to go to Student Map
-          const ListTile(
-            leading: Icon(Icons.map),
-            title: Text("Student Map"),
-            trailing: Icon(Icons.chevron_right),
+          ListTile(
+            leading: const Icon(Icons.map),
+            title: const Text("Student Map"),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const MapPage(),
+              ));
+            },
           ),
           //Option to go to Settings
           const ListTile(

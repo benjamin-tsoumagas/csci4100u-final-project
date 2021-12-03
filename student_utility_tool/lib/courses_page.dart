@@ -5,11 +5,11 @@ import 'navigation_drawer.dart';
 import 'global_content_holder.dart';
 
 class CoursesPage extends StatefulWidget {
-  const CoursesPage({Key key}) : super(key: key);
+  CoursesPage({Key key}) : super(key: key);
 
-  final String email = "Student's Utility Tool";
-  final String userName = "";
-  final String password = "";
+  final String email = GlobalHolder.email;
+  final String userName = GlobalHolder.username;
+  final String password = GlobalHolder.password;
 
   @override
   State<CoursesPage> createState() => _CourseListState();

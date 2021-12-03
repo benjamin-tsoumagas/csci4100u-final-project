@@ -23,18 +23,10 @@ class _UserPageState extends State<UserPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   List passwordList;
+  List usernameList;
   bool isObscure = true;
 
   final users = FirebaseFirestore.instance.collection('user');
-
-  Future<List> getData(String email) async {
-    // Get docs from collection reference
-    QuerySnapshot querySnapshot =
-        await users.where('email', isEqualTo: email).get();
-    passwordList =
-        querySnapshot.docs.map((doc) => doc.get('password')).toList();
-    return passwordList;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,15 +106,24 @@ class _UserPageState extends State<UserPage> {
                         child: ElevatedButton.icon(
                             onPressed: () async {
                               if (formKey.currentState.validate()) {
-                                passwordList =
-                                    await getData(emailController.text);
-                                if (passwordList != null &&
+                                QuerySnapshot querySnapshot = await users
+                                    .where('email',
+                                        isEqualTo: emailController.text)
+                                    .get();
+                                passwordList = querySnapshot.docs
+                                    .map((doc) => doc.get('password'))
+                                    .toList();
+                                usernameList = querySnapshot.docs
+                                    .map((doc) => doc.get('username'))
+                                    .toList();
+                                if (passwordList.isNotEmpty &&
                                     passwordList[0] ==
                                         passwordController.text) {
                                   Navigator.pop(context);
                                   GlobalHolder.email = emailController.text;
                                   GlobalHolder.password =
                                       passwordController.text;
+                                  GlobalHolder.username = usernameList[0];
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
