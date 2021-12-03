@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'courses_page.dart';
 import 'home_page.dart';
 import 'map_page.dart';
+import 'grade_page.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   const NavigationDrawerWidget({Key? key}) : super(key: key);
@@ -29,10 +30,14 @@ class NavigationDrawerWidget extends StatelessWidget {
             },
           ),
           //Option to go to Add Grades
-          const ListTile(
-            leading: Icon(Icons.insert_chart),
-            title: Text("Add Grade"),
-            trailing: Icon(Icons.chevron_right),
+          ListTile(
+            leading: const Icon(Icons.insert_chart),
+            title: const Text("Add Grade"),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => GradeCalculatorPage()));
+            },
           ),
           //Option to go to Courses
           ListTile(
