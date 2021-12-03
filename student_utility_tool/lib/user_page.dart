@@ -52,7 +52,7 @@ class _UserPageState extends State<UserPage> {
             margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
             child: SizedBox(
               width: 370,
-              height: 210,
+              height: 270,
               child: Form(
                 key: formKey,
                 child: Column(
