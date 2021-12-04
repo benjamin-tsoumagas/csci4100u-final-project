@@ -1,5 +1,4 @@
 // @dart=2.9
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'navigation_drawer.dart';
@@ -210,7 +209,7 @@ class _CourseListState extends State<CoursesPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: width * 0.75,
+                              width: width * 0.7,
                               child: Center(
                                 child: Text(
                                   snapshot.data[index]['courseName'],
@@ -220,12 +219,27 @@ class _CourseListState extends State<CoursesPage> {
                               ),
                             ),
                             SizedBox(
-                                width: width * 0.25,
+                                width: width * 0.15,
                                 child: IconButton(
                                     onPressed: () => updateCoursePopup(
                                         context, snapshot.data[index]),
                                     icon: const Icon(
                                       Icons.edit,
+                                      color: Colors.deepPurple,
+                                    ))),
+                            SizedBox(
+                                width: width * 0.15,
+                                child: IconButton(
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .runTransaction((Transaction
+                                              myTransaction) async {
+                                        myTransaction.delete(
+                                            snapshot.data[index].reference);
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
                                       color: Colors.deepPurple,
                                     )))
                           ],
@@ -256,7 +270,6 @@ class CourseInputState extends State<CourseInputPage> {
       TextStyle(color: Colors.purple[400], fontSize: 16);
 
   gradesInputPopup(GradePerAssesment data) {
-    // most of the code taken from user_page.dart\
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     TextEditingController assessmentTypeController = TextEditingController();
     TextEditingController weightController = TextEditingController();
