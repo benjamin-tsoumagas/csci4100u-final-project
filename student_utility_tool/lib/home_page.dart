@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'navigation_drawer.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key key}) : super(key: key);
@@ -9,114 +10,50 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(300.0),
-            child: AppBar(
-              flexibleSpace: Container(
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            "https://shepherdtraveller.com/wp-content/uploads/2021/04/oeschinensee-camping-Lakes-in-Switzerland-1536x1024.jpg"),
-                        fit: BoxFit.fill)),
-              ),
-            )),
-        body: columnWidget());
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(300.0),
+          child: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          "https://shared.ontariotechu.ca/shared/department/itsc/All%20Images/wallpapers-and-screensavers/desktop_768x1366--ontariotech_.jpg"),
+                      fit: BoxFit.fitHeight)),
+            ),
+          )),
+      body: columnWidget(),
+      drawer: const NavigationDrawerWidget(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Clipboard.setData(
+              const ClipboardData(text: "https://ontariotechu.ca/"));
+        },
+        child: const Icon(Icons.share),
+        backgroundColor: Colors.blue[900],
+      ),
+    );
   }
 
   Widget columnWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [locationWidget(), const SizedBox(height: 30), iconWidgets()],
-    );
-  }
-
-  Widget locationWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(width: 20),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Text("Oeschinen Lake Campground",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                )),
-            const SizedBox(height: 10),
-            Text("Kandersteg, Switzerland",
-                style: TextStyle(
-                    color: Colors.black.withOpacity(0.5), fontSize: 18)),
-          ],
-        ),
-        const SizedBox(width: 100),
-        const FavoriteIcon()
-      ],
-    );
-  }
-
-  Widget iconWidgets() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildButtonColumn(Colors.blue, Icons.call, "CALL"),
-        _buildButtonColumn(Colors.blue, Icons.near_me, "ROUTE"),
-        _buildButtonColumn(Colors.blue, Icons.share, "SHARE")
-      ],
-    );
-  }
-
-  /// This helper function returns a column widget with a button and text label.
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        IconButton(onPressed: () {}, icon: Icon(icon), color: color),
-        Text(
-          label,
-          style: TextStyle(color: color),
-        )
-      ],
-    );
-  }
-}
-
-class FavoriteIcon extends StatefulWidget {
-  const FavoriteIcon({Key key}) : super(key: key);
-
-  @override
-  _FavoriteIconState createState() => _FavoriteIconState();
-}
-
-class _FavoriteIconState extends State<FavoriteIcon> {
-  Color _color = Colors.red;
-  double _counter = 2.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
-        ElevatedButton.icon(
-            onPressed: () {
-              setState(() {
-                if (_color == Colors.red) {
-                  _color = Colors.white;
-                  _counter--;
-                } else {
-                  _color = Colors.red;
-                  _counter++;
-                }
-              });
-            },
-            icon: Icon(Icons.favorite, color: _color),
-            label: Text('$_counter')),
+        const Text("Ontario Tech University",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            )),
+        const SizedBox(height: 10),
+        Text("2000 Simcoe St N, Oshawa, ON L1G 0C5",
+            style:
+                TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 18)),
+        const SizedBox(height: 50),
+        const Text(
+          "The University of Ontario Institute of Technology, corporately branded as Ontario Tech University or Ontario Tech, is a public research university located in Oshawa, Ontario, Canada. Ontario Tech's main campus is located on approximately 400 acres of land in the northern part of Oshawa.",
+          style: TextStyle(fontSize: 18),
+        ),
       ],
     );
   }
