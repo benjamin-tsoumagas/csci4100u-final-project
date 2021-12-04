@@ -1,4 +1,5 @@
 // @dart=2.9
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'navigation_drawer.dart';
@@ -17,13 +18,6 @@ class _CourseListState extends State<CoursesPage> {
       .collection('user')
       .doc(GlobalHolder.email)
       .collection('Courses');
-  Future<List> _userCourses;
-
-  @override
-  void initState() {
-    super.initState();
-    _userCourses = getData();
-  }
 
   Future<List> getData() async {
     // Get docs from collection reference
@@ -35,10 +29,130 @@ class _CourseListState extends State<CoursesPage> {
     return allData;
   }
 
-  newCoursePopup(BuildContext context) {
-    // get new line of data
-    final grades = Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => CourseInputPage()));
+  getCourseNamePopup(BuildContext context, String inputText) async {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    TextEditingController nameController = TextEditingController();
+    String actionText = 'Continue';
+    if (inputText != null) {
+      actionText = 'Update';
+      nameController.text = inputText;
+    }
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: Builder(
+                builder: (BuildContext context) {
+                  var size = MediaQuery.of(context).size;
+
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(),
+                      child: SizedBox(
+                        height: size.height * 0.3,
+                        width: size.width,
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                controller: nameController,
+                                decoration: const InputDecoration(
+                                    labelText: "Course Name"),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'This field cant be empty';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Center(
+                                  child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      if (formKey.currentState.validate()) {
+                                        Navigator.pop(
+                                            context, nameController.text);
+                                      }
+                                    },
+                                    child: Text(actionText)),
+                              ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  updateCoursePopup(BuildContext context, data) async {
+    //get course name\\
+    String courseName;
+    List<GradePerAssesment> allAssigns = [];
+    if (data != null) {
+      courseName = await getCourseNamePopup(context, data['courseName']);
+      for (int i; i < data['assignNames'].length; i++) {
+        GradePerAssesment newGrade = GradePerAssesment();
+        newGrade.name = data['assignNames'][i];
+        newGrade.weight = double.parse(data['weights'][i]);
+        newGrade.grade = double.parse(data['grades'][i]);
+        allAssigns.add(GradePerAssesment());
+      }
+      allAssigns = await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CourseInputPage(),
+          settings: RouteSettings(arguments: allAssigns)));
+    } else {
+      courseName = await getCourseNamePopup(context, null);
+      if (courseName != null) {
+        allAssigns = await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => CourseInputPage()));
+      }
+    }
+
+    // creating 3 lists of data for storing
+    int size = allAssigns.length;
+    var names = List.filled(size, "N/A");
+    var weights = List.filled(size, 0.0);
+    var grades = List.filled(size, 0.0);
+
+    for (int i = 0; i < size; i++) {
+      names[i] = allAssigns[i].name;
+      weights[i] = allAssigns[i].weight;
+      grades[i] = allAssigns[i].grade;
+    }
+
+    if (data['courseName'] != courseName) {
+      await FirebaseFirestore.instance
+          .runTransaction((Transaction myTransaction) async {
+        myTransaction.delete(data.reference);
+      });
+    }
+    userCourses.doc(courseName).set({
+      'courseName': courseName,
+      'assignNames': names,
+      'weights': weights,
+      'grades': grades,
+    });
+
+    setState(() {});
   }
 
   @override
@@ -63,6 +177,8 @@ class _CourseListState extends State<CoursesPage> {
                 ? ListView.builder(
                     itemCount: listSize + 1,
                     itemBuilder: (BuildContext context, int index) {
+                      double width = MediaQuery.of(context).size.width;
+
                       if (index == listSize) {
                         //last element is add new course button
                         return Container(
@@ -71,27 +187,48 @@ class _CourseListState extends State<CoursesPage> {
                               (index % 2) * colourDiff + colourShift],
                           child: Center(
                             child: ElevatedButton(
-                                onPressed: () => newCoursePopup(context),
+                                onPressed: () =>
+                                    updateCoursePopup(context, null),
                                 child: SizedBox(
-                                    width: 100,
-                                    child: Row(children: const [
-                                      Icon(Icons.add),
-                                      Text('Add Course')
-                                    ]))),
+                                    width: width * 0.25,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.add),
+                                          Text('Add Course')
+                                        ]))),
                           ),
                         );
                       }
+
                       return Container(
                         height: containerHeight,
                         color:
                             colourStyle[(index % 2) * colourDiff + colourShift],
-                        child: Center(
-                          child: GestureDetector(
-                              onTap: () {
-                                // Bring to the course data page \\
-                              },
-                              child: const Text('Testing') // course name \\
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: width * 0.75,
+                              child: Center(
+                                child: Text(
+                                  snapshot.data[index]['courseName'],
+                                  style:
+                                      const TextStyle(color: Colors.deepPurple),
+                                ),
                               ),
+                            ),
+                            SizedBox(
+                                width: width * 0.25,
+                                child: IconButton(
+                                    onPressed: () => updateCoursePopup(
+                                        context, snapshot.data[index]),
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Colors.deepPurple,
+                                    )))
+                          ],
                         ),
                       );
                     })
@@ -106,7 +243,8 @@ class _CourseListState extends State<CoursesPage> {
 ///////////////////////////////////////////////////////////////////////////////
 
 class CourseInputPage extends StatefulWidget {
-  const CourseInputPage({Key key}) : super(key: key);
+  const CourseInputPage({Key key, this.grades}) : super(key: key);
+  final List<GradePerAssesment> grades;
 
   @override
   State<StatefulWidget> createState() => CourseInputState();
@@ -114,7 +252,8 @@ class CourseInputPage extends StatefulWidget {
 
 class CourseInputState extends State<CourseInputPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  List<GradePerAssesment> grades = [];
+  final TextStyle textStyle =
+      TextStyle(color: Colors.purple[400], fontSize: 16);
 
   gradesInputPopup(GradePerAssesment data) {
     // most of the code taken from user_page.dart\
@@ -123,15 +262,14 @@ class CourseInputState extends State<CourseInputPage> {
     TextEditingController weightController = TextEditingController();
     TextEditingController gradeController = TextEditingController();
     String actionText = 'Add Grade';
+    String otherActionText = 'Cancel';
     if (data != null) {
       assessmentTypeController.text = data.name;
       weightController.text = data.weight.toString();
       gradeController.text = data.grade.toString();
       actionText = 'Update Grade';
-    } else {
-      data = GradePerAssesment();
+      otherActionText = 'Delete';
     }
-    bool isObscure = true;
 
     return showDialog(
       context: context,
@@ -193,7 +331,6 @@ class CourseInputState extends State<CourseInputPage> {
                                 height: 20,
                               ),
                               TextFormField(
-                                obscureText: isObscure,
                                 controller: gradeController,
                                 decoration: const InputDecoration(
                                   labelText: "Grade (%)",
@@ -214,17 +351,24 @@ class CourseInputState extends State<CourseInputPage> {
                                 },
                               ),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 30),
                                     child: ElevatedButton(
                                         onPressed: () {
-                                          if (formKey.currentState.validate()) {
+                                          if (data != null) {
+                                            widget.grades.remove(data);
+                                            Navigator.pop(context);
+                                          } else {
                                             Navigator.pop(context, data);
                                           }
                                         },
-                                        child: const Text("Cancel")),
+                                        child: Text(otherActionText)),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
                                   ),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
@@ -232,6 +376,7 @@ class CourseInputState extends State<CourseInputPage> {
                                     child: ElevatedButton(
                                         onPressed: () {
                                           if (formKey.currentState.validate()) {
+                                            data ??= GradePerAssesment();
                                             data.name =
                                                 assessmentTypeController.text;
                                             data.weight = double.parse(
@@ -262,9 +407,20 @@ class CourseInputState extends State<CourseInputPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    List<GradePerAssesment> grades = widget.grades;
+    grades ??= [];
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Grades"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.pop(context, grades);
+                },
+                icon: const Icon(Icons.save))
+          ],
         ),
         body: ListView.builder(
             itemCount: grades.length + 1,
@@ -276,13 +432,19 @@ class CourseInputState extends State<CourseInputPage> {
               int colourShift = 50;
 
               if (index == grades.length) {
-                //last element is add new course button
+                //last element is add new grade button
                 return Container(
                   height: containerHeight,
                   color: colourStyle[(index % 2) * colourDiff + colourShift],
                   child: Center(
                     child: ElevatedButton(
-                        onPressed: () => gradesInputPopup(null),
+                        onPressed: () async {
+                          var newGradeData = await gradesInputPopup(null);
+                          if (newGradeData != null) {
+                            grades.add(newGradeData);
+                            setState(() {});
+                          }
+                        },
                         child: SizedBox(
                             width: 150,
                             child: Row(children: const [
@@ -296,12 +458,53 @@ class CourseInputState extends State<CourseInputPage> {
                 height: containerHeight,
                 color: colourStyle[(index % 2) * colourDiff + colourShift],
                 child: Center(
-                  child: GestureDetector(
-                      onTap: () {
-                        // Bring to the course data page \\
-                      },
-                      child: const Text('Testing') // course name \\
+                  child: Row(
+                    children: [
+                      SizedBox(
+                          width: width * 0.4,
+                          child: Center(
+                            child: Text(
+                              grades[index].name,
+                              style: textStyle,
+                            ),
+                          )),
+                      SizedBox(
+                        width: width * 0.2,
+                        child: Center(
+                          child: Text(
+                            grades[index].weight.toString(),
+                            style: textStyle,
+                          ),
+                        ),
                       ),
+                      SizedBox(
+                        width: width * 0.2,
+                        child: Center(
+                          child: Text(
+                            grades[index].grade.toString(),
+                            style: textStyle,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                          width: width * 0.2,
+                          child: Center(
+                            child: IconButton(
+                              onPressed: () async {
+                                var newGradeData =
+                                    gradesInputPopup(grades[index]);
+                                if (newGradeData != null) {
+                                  setState(() {});
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.deepPurple,
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
                 ),
               );
             }));
@@ -312,4 +515,14 @@ class GradePerAssesment {
   String name;
   double weight;
   double grade;
+
+  @override
+  String toString() {
+    return name +
+        'weighs' +
+        weight.toString() +
+        '% and got a ' +
+        grade.toString() +
+        '% as a grade';
+  }
 }
