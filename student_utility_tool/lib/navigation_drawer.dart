@@ -34,10 +34,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             leading: const Icon(Icons.insert_chart),
             title: const Text("Add Grade"),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => GradeCalculatorPage()));
-            },
+            onTap: () {},
           ),
           //Option to go to Courses
           ListTile(
@@ -51,10 +48,14 @@ class NavigationDrawerWidget extends StatelessWidget {
             },
           ),
           //Option to go to Grade Calculator
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.calculate),
             title: Text("Grade Calculator"),
             trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => GradeCalculatorPage()));
+            },
           ),
           //Option to go to Student Map
           ListTile(
