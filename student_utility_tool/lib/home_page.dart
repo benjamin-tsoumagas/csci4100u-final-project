@@ -24,6 +24,11 @@ class HomePage extends StatelessWidget {
           )),
       body: columnWidget(context),
       drawer: const NavigationDrawerWidget(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple,
+        onPressed: () {},
+        child: const Icon(Icons.favorite),
+      ),
     );
   }
 
