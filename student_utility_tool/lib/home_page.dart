@@ -159,13 +159,4 @@ class SimpleNotification {
                     ? const Text("Website information copied.")
                     : null));
   }
-
-  Future showNotification() async {
-    var android = AndroidNotificationDetails("channelId", "channelName",
-        priority: Priority.high, importance: Importance.max);
-    var platformDetails = NotificationDetails(android: android);
-    await notification.show(100, "Simple Notification",
-        "This is a simple notification", platformDetails,
-        payload: "a demo payload");
-  }
 }
