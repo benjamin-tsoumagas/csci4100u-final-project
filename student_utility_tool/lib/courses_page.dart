@@ -159,6 +159,7 @@ class _CourseListState extends State<CoursesPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Courses"),
+        backgroundColor: Colors.purple,
       ),
       drawer: const NavigationDrawerWidget(),
       body: FutureBuilder<List>(
@@ -428,6 +429,7 @@ class CourseInputState extends State<CourseInputPage> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Grades"),
+          backgroundColor: Colors.purple,
           actions: [
             IconButton(
                 onPressed: () {

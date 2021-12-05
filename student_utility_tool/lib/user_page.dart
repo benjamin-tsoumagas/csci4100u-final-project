@@ -35,6 +35,7 @@ class _UserPageState extends State<UserPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.title),
+        backgroundColor: Colors.purple,
         automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(

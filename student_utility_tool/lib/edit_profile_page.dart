@@ -25,6 +25,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Edit Profile"),
+        backgroundColor: Colors.purple,
       ),
       body: SingleChildScrollView(
         child: Container(
