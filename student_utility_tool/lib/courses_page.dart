@@ -106,24 +106,22 @@ class _CourseListState extends State<CoursesPage> {
     //get course name\\
     String courseName;
     List<GradePerAssesment> allAssigns = [];
-    if (data != null) {
+    if (data == null) {
+      courseName = await getCourseNamePopup(context, null);
+      if (courseName == null) {
+        return null;
+      }
+      allAssigns = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const CourseInputPage(),
+      ));
+    } else {
       courseName = await getCourseNamePopup(context, data['courseName']);
-      for (int i; i < data['assignNames'].length; i++) {
-        GradePerAssesment newGrade = GradePerAssesment();
-        newGrade.name = data['assignNames'][i];
-        newGrade.weight = double.parse(data['weights'][i]);
-        newGrade.grade = double.parse(data['grades'][i]);
-        allAssigns.add(GradePerAssesment());
+      if (courseName == null) {
+        return null;
       }
       allAssigns = await Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const CourseInputPage(),
-          settings: RouteSettings(arguments: allAssigns)));
-    } else {
-      courseName = await getCourseNamePopup(context, null);
-      if (courseName != null) {
-        allAssigns = await Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const CourseInputPage()));
-      }
+          settings: RouteSettings(arguments: data['courseName'])));
     }
 
     // creating 3 lists of data for storing
@@ -138,11 +136,9 @@ class _CourseListState extends State<CoursesPage> {
       grades[i] = allAssigns[i].grade;
     }
 
-    if (data['courseName'] != courseName) {
-      await FirebaseFirestore.instance
-          .runTransaction((Transaction myTransaction) async {
-        myTransaction.delete(data.reference);
-      });
+    if (data != null && data['courseName'] != courseName) {
+      userCourses.doc(data['courseName']).delete();
+      setState(() {});
     }
     userCourses.doc(courseName).set({
       'courseName': courseName,
@@ -232,12 +228,11 @@ class _CourseListState extends State<CoursesPage> {
                                 width: width * 0.15,
                                 child: IconButton(
                                     onPressed: () async {
-                                      await FirebaseFirestore.instance
-                                          .runTransaction((Transaction
-                                              myTransaction) async {
-                                        myTransaction.delete(
-                                            snapshot.data[index].reference);
-                                      });
+                                      userCourses
+                                          .doc(snapshot.data[index]
+                                              ['courseName'])
+                                          .delete();
+                                      setState(() {});
                                     },
                                     icon: const Icon(
                                       Icons.delete,
@@ -258,8 +253,8 @@ class _CourseListState extends State<CoursesPage> {
 ///////////////////////////////////////////////////////////////////////////////
 
 class CourseInputPage extends StatefulWidget {
-  const CourseInputPage({Key key, this.grades}) : super(key: key);
-  final List<GradePerAssesment> grades;
+  const CourseInputPage({Key key, this.courseName}) : super(key: key);
+  final String courseName;
 
   @override
   State<StatefulWidget> createState() => CourseInputState();
@@ -269,6 +264,9 @@ class CourseInputState extends State<CourseInputPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextStyle textStyle =
       TextStyle(color: Colors.purple[400], fontSize: 16);
+  final TextStyle textStyle2 =
+      const TextStyle(color: Colors.white, fontSize: 16);
+  List<GradePerAssesment> grades = [];
 
   gradesInputPopup(GradePerAssesment data) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -373,7 +371,7 @@ class CourseInputState extends State<CourseInputPage> {
                                     child: ElevatedButton(
                                         onPressed: () {
                                           if (data != null) {
-                                            widget.grades.remove(data);
+                                            grades.remove(data);
                                             Navigator.pop(context);
                                           } else {
                                             Navigator.pop(context, data);
@@ -422,8 +420,14 @@ class CourseInputState extends State<CourseInputPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    List<GradePerAssesment> grades = widget.grades;
-    grades ??= [];
+
+    /*for (int i; i < data['assignNames'].length; i++) {
+      GradePerAssesment newGrade = GradePerAssesment();
+      newGrade.name = data['assignNames'][i];
+      newGrade.weight = double.parse(data['weights'][i]);
+      newGrade.grade = double.parse(data['grades'][i]);
+      allAssigns.add(GradePerAssesment());
+    }*/
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -439,7 +443,7 @@ class CourseInputState extends State<CourseInputPage> {
           ],
         ),
         body: ListView.builder(
-            itemCount: grades.length + 1,
+            itemCount: grades.length + 2,
             itemBuilder: (BuildContext context, int index) {
               //settings\\
               double containerHeight = 60;
@@ -447,11 +451,48 @@ class CourseInputState extends State<CourseInputPage> {
               int colourDiff = 50;
               int colourShift = 50;
 
-              if (index == grades.length) {
+              if (index == 0) {
+                return Container(
+                  height: containerHeight,
+                  color: Colors.purple[300],
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: width * 0.4,
+                        child: Center(
+                          child: Text(
+                            'Assesment Type',
+                            style: textStyle2,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width * 0.2,
+                        child: Center(
+                          child: Text(
+                            'Weight',
+                            style: textStyle2,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width * 0.2,
+                        child: Center(
+                          child: Text(
+                            'Grade',
+                            style: textStyle2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (index == grades.length + 1) {
                 //last element is add new grade button
                 return Container(
                   height: containerHeight,
-                  color: colourStyle[(index % 2) * colourDiff + colourShift],
+                  color:
+                      colourStyle[(index - 1 % 2) * colourDiff + colourShift],
                   child: Center(
                     child: ElevatedButton(
                         onPressed: () async {
@@ -472,7 +513,7 @@ class CourseInputState extends State<CourseInputPage> {
               }
               return Container(
                 height: containerHeight,
-                color: colourStyle[(index % 2) * colourDiff + colourShift],
+                color: colourStyle[(index - 1 % 2) * colourDiff + colourShift],
                 child: Center(
                   child: Row(
                     children: [
@@ -480,7 +521,7 @@ class CourseInputState extends State<CourseInputPage> {
                           width: width * 0.4,
                           child: Center(
                             child: Text(
-                              grades[index].name,
+                              grades[index - 1].name,
                               style: textStyle,
                             ),
                           )),
@@ -488,7 +529,7 @@ class CourseInputState extends State<CourseInputPage> {
                         width: width * 0.2,
                         child: Center(
                           child: Text(
-                            grades[index].weight.toString(),
+                            grades[index - 1].weight.toString() + '%',
                             style: textStyle,
                           ),
                         ),
@@ -497,7 +538,7 @@ class CourseInputState extends State<CourseInputPage> {
                         width: width * 0.2,
                         child: Center(
                           child: Text(
-                            grades[index].grade.toString(),
+                            grades[index - 1].grade.toString() + '%',
                             style: textStyle,
                           ),
                         ),
@@ -508,10 +549,8 @@ class CourseInputState extends State<CourseInputPage> {
                             child: IconButton(
                               onPressed: () async {
                                 var newGradeData =
-                                    gradesInputPopup(grades[index]);
-                                if (newGradeData != null) {
-                                  setState(() {});
-                                }
+                                    gradesInputPopup(grades[index - 1]);
+                                setState(() {});
                               },
                               icon: const Icon(
                                 Icons.edit,
