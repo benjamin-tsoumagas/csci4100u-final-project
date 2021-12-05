@@ -39,14 +39,17 @@ class _UserPageState extends State<UserPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Card(
-              margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 5,
+                  left: 15,
+                  right: 15),
               child: SizedBox(
-                width: 370,
-                height: 270,
+                width: MediaQuery.of(context).size.width - 30,
+                height: MediaQuery.of(context).size.height / 4,
                 child: Form(
                   key: formKey,
                   child: Column(

@@ -1,12 +1,11 @@
-// @dart=2.9
-
 import 'package:flutter/material.dart';
 import 'map_page.dart';
 import 'navigation_drawer.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +56,7 @@ class HomePage extends StatelessWidget {
                       onPressed: () {
                         Clipboard.setData(
                             const ClipboardData(text: "(905) 721-8668"));
+                        SimpleNotification(context).selectNotification("Call");
                       },
                       icon: const Icon(
                         Icons.phone,
@@ -101,6 +101,7 @@ class HomePage extends StatelessWidget {
                         Clipboard.setData(
                           const ClipboardData(text: "https://ontariotechu.ca/"),
                         );
+                        SimpleNotification(context).selectNotification("Share");
                       },
                       icon: const Icon(
                         Icons.share,
@@ -121,5 +122,50 @@ class HomePage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class SimpleNotification {
+  BuildContext context;
+  late FlutterLocalNotificationsPlugin notification;
+
+  SimpleNotification(this.context) {
+    initNotification();
+  }
+
+  //initialize notification
+  initNotification() {
+    notification = FlutterLocalNotificationsPlugin();
+    AndroidInitializationSettings androidInitializationSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    IOSInitializationSettings iOSInitializationSettings =
+        IOSInitializationSettings();
+
+    InitializationSettings initializationSettings = InitializationSettings(
+        android: androidInitializationSettings, iOS: iOSInitializationSettings);
+
+    notification.initialize(initializationSettings,
+        onSelectNotification: selectNotification);
+  }
+
+  Future<String?> selectNotification(String? payload) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+            title: Text("$payload Clicked"),
+            content: payload == "Call"
+                ? const Text("Phone number copied.")
+                : payload == "Share"
+                    ? const Text("Website information copied.")
+                    : null));
+  }
+
+  Future showNotification() async {
+    var android = AndroidNotificationDetails("channelId", "channelName",
+        priority: Priority.high, importance: Importance.max);
+    var platformDetails = NotificationDetails(android: android);
+    await notification.show(100, "Simple Notification",
+        "This is a simple notification", platformDetails,
+        payload: "a demo payload");
   }
 }
