@@ -168,11 +168,7 @@ class _MapPageState extends State<MapPage> {
                 ),
                 onTap: () {
                   Clipboard.setData(
-                      const ClipboardData(text: "(905) 721-8668"));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Copied"),
-                    ),
+                    const ClipboardData(text: "(905) 721-8668"),
                   );
                 },
               ),
@@ -184,7 +180,8 @@ class _MapPageState extends State<MapPage> {
                 ),
                 onTap: () {
                   Clipboard.setData(
-                      const ClipboardData(text: "https://ontariotechu.ca/"));
+                    const ClipboardData(text: "https://ontariotechu.ca/"),
+                  );
                 },
               ),
             ],

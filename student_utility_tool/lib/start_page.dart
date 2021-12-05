@@ -27,10 +27,12 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      body: Center(
-        child: Expanded(
+      body: SingleChildScrollView(
+        child: Center(
           child: Container(
-            padding: const EdgeInsets.all(10),
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(20),
             //Start page content
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

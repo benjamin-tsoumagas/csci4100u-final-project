@@ -51,7 +51,7 @@ class _CourseListState extends State<CoursesPage> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(),
                       child: SizedBox(
-                        height: size.height * 0.3,
+                        height: size.height - 450,
                         width: size.width,
                         child: Form(
                           key: formKey,
@@ -425,6 +425,7 @@ class CourseInputState extends State<CourseInputPage> {
     grades ??= [];
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text("Grades"),
           actions: [

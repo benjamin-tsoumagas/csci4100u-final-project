@@ -1,6 +1,7 @@
 // @dart=2.9
 
 import 'package:flutter/material.dart';
+import 'map_page.dart';
 import 'navigation_drawer.dart';
 import 'package:flutter/services.dart';
 
@@ -17,42 +18,103 @@ class HomePage extends StatelessWidget {
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage(
-                          "https://shared.ontariotechu.ca/shared/department/itsc/All%20Images/wallpapers-and-screensavers/desktop_768x1366--ontariotech_.jpg"),
+                          "https://www.edgeip.com/images/FCK/Image/201908/20-OntarioTech-Get-to-Know-Our-Community-SIC.jpg"),
                       fit: BoxFit.fitHeight)),
             ),
           )),
-      body: columnWidget(),
+      body: columnWidget(context),
       drawer: const NavigationDrawerWidget(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Clipboard.setData(
-              const ClipboardData(text: "https://ontariotechu.ca/"));
-        },
-        child: const Icon(Icons.share),
-        backgroundColor: Colors.blue[900],
-      ),
     );
   }
 
-  Widget columnWidget() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(height: 20),
-        const Text("Ontario Tech University",
+  Widget columnWidget(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 30),
+          const Text(
+            "Ontario Tech University",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 25,
-            )),
-        Container(
-          padding: const EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),
-          child: const Text(
-            "The University of Ontario Institute of Technology, corporately branded as Ontario Tech University or Ontario Tech, is a public research university located in Oshawa, Ontario, Canada. Ontario Tech's main campus is located on approximately 400 acres of land in the northern part of Oshawa.",
-            style: TextStyle(color: Colors.black87, fontSize: 18.0),
+              fontSize: 30,
+            ),
           ),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.only(top: 15, left: 2.0, bottom: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Clipboard.setData(
+                            const ClipboardData(text: "(905) 721-8668"));
+                      },
+                      icon: const Icon(
+                        Icons.phone,
+                        color: Colors.purple,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      "CALL",
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MapPage(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.near_me,
+                        color: Colors.purple,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      "ROUTE",
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Clipboard.setData(
+                          const ClipboardData(text: "https://ontariotechu.ca/"),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.share,
+                        color: Colors.purple,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      "SHARE",
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

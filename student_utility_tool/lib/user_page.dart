@@ -37,139 +37,140 @@ class _UserPageState extends State<UserPage> {
         title: Text(widget.title),
         automaticallyImplyLeading: false,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Card(
-            margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
-            child: SizedBox(
-              width: 370,
-              height: 270,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding:
-                          const EdgeInsets.only(top: 5, left: 20, right: 20),
-                      child: TextFormField(
-                        controller: emailController,
-                        decoration: const InputDecoration(labelText: "Email"),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'This field cant be null';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          const EdgeInsets.only(top: 5, left: 20, right: 20),
-                      child: TextFormField(
-                        obscureText: isObscure,
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isObscure
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                            ),
-                            onPressed: () {
-                              setState(
-                                () {
-                                  isObscure = !isObscure;
-                                },
-                              );
-                            },
-                          ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
+              child: SizedBox(
+                width: 370,
+                height: 270,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding:
+                            const EdgeInsets.only(top: 5, left: 20, right: 20),
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(labelText: "Email"),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'This field cant be null';
+                            }
+                            return null;
+                          },
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'This field cant be null';
-                          }
-                          return null;
-                        },
                       ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                        padding: const EdgeInsets.only(left: 40, right: 40),
+                      Container(
+                        padding:
+                            const EdgeInsets.only(top: 5, left: 20, right: 20),
+                        child: TextFormField(
+                          obscureText: isObscure,
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: "Password",
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isObscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    isObscure = !isObscure;
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'This field cant be null';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Container(
+                        padding:
+                            const EdgeInsets.only(top: 15, left: 40, right: 40),
                         width: 350,
                         child: ElevatedButton.icon(
-                            onPressed: () async {
-                              if (formKey.currentState.validate()) {
-                                QuerySnapshot querySnapshot = await users
-                                    .where('email',
-                                        isEqualTo: emailController.text)
-                                    .get();
-                                passwordList = querySnapshot.docs
-                                    .map((doc) => doc.get('password'))
-                                    .toList();
-                                usernameList = querySnapshot.docs
-                                    .map((doc) => doc.get('username'))
-                                    .toList();
-                                if (passwordList.isNotEmpty &&
-                                    passwordList[0] ==
-                                        passwordController.text) {
-                                  Navigator.pop(context);
-                                  GlobalHolder.email = emailController.text;
-                                  GlobalHolder.password =
-                                      passwordController.text;
-                                  GlobalHolder.username = usernameList[0];
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const HomePage(),
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text("Logged in successfully"),
-                                    ),
-                                  );
-                                } else {
-                                  _showErrorDialog(context);
-                                }
+                          onPressed: () async {
+                            if (formKey.currentState.validate()) {
+                              QuerySnapshot querySnapshot = await users
+                                  .where('email',
+                                      isEqualTo: emailController.text)
+                                  .get();
+                              passwordList = querySnapshot.docs
+                                  .map((doc) => doc.get('password'))
+                                  .toList();
+                              usernameList = querySnapshot.docs
+                                  .map((doc) => doc.get('username'))
+                                  .toList();
+                              if (passwordList.isNotEmpty &&
+                                  passwordList[0] == passwordController.text) {
+                                Navigator.pop(context);
+                                GlobalHolder.email = emailController.text;
+                                GlobalHolder.password = passwordController.text;
+                                GlobalHolder.username = usernameList[0];
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const HomePage(),
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Logged in successfully"),
+                                  ),
+                                );
+                              } else {
+                                showErrorDialog(context);
                               }
-                            },
-                            icon: const Icon(Icons.login),
-                            label: const Text("Login"))),
-                  ],
+                            }
+                          },
+                          icon: const Icon(Icons.login),
+                          label: const Text("Login"),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 30, left: 120),
-            child: Row(
-              children: [
-                GestureDetector(
-                  child: const Text(
-                    "Create Account",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.purple,
-                        decoration: TextDecoration.underline),
+            Container(
+              padding: const EdgeInsets.only(top: 30, left: 120, right: 120),
+              width: 350,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    child: const Text(
+                      "Create Account",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.purple,
+                          decoration: TextDecoration.underline),
+                    ),
+                    onTap: () => registerDialog(context),
                   ),
-                  onTap: () => _registerDialog(context),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  _showErrorDialog(BuildContext context) {
+  showErrorDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -189,7 +190,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  _registerDialog(BuildContext context) {
+  registerDialog(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     TextEditingController usernameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
@@ -293,21 +294,20 @@ class _UserPageState extends State<UserPage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 30),
                                 child: ElevatedButton(
-                                    onPressed: () {
-                                      if (formKey.currentState.validate()) {
-                                        final users = FirebaseFirestore.instance
-                                            .collection('user');
-                                        users.add(
-                                          {
-                                            'username': usernameController.text,
-                                            'email': emailController.text,
-                                            'password': passwordController.text,
-                                          },
-                                        );
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                    child: const Text("Create Account")),
+                                  onPressed: () {
+                                    if (formKey.currentState.validate()) {
+                                      users.add(
+                                        {
+                                          'username': usernameController.text,
+                                          'email': emailController.text,
+                                          'password': passwordController.text,
+                                        },
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: const Text("Create Account"),
+                                ),
                               )
                             ],
                           ),

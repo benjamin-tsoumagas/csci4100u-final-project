@@ -163,19 +163,19 @@ class GradeCalculatorPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         const Text(
           "Grade Calculator:",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Container(
-          padding: const EdgeInsets.only(
-              top: 10.0, left: 25.0, right: 25.0, bottom: 20.0),
+          padding: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
           child: const Text(
             "The grade calculator will provide your overall grade based on assignments, midterms, and final exam.",
             style: TextStyle(color: Colors.black87, fontSize: 17.0),
           ),
         ),
+        const SizedBox(height: 20),
         const Text(
           "Final Grade Calculator:",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
