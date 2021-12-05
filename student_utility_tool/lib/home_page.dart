@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'map_page.dart';
 import 'navigation_drawer.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart';
+import 'dart:math';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,7 +28,9 @@ class HomePage extends StatelessWidget {
       drawer: const NavigationDrawerWidget(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
-        onPressed: () {},
+        onPressed: () {
+          SimpleNotification(context).quoteNotification();
+        },
         child: const Icon(Icons.favorite),
       ),
     );
@@ -125,6 +130,18 @@ class HomePage extends StatelessWidget {
   }
 }
 
+class InspirationalQuote {
+  String quote;
+  String author;
+
+  InspirationalQuote(this.quote, this.author);
+
+  @override
+  String toString() {
+    return "$quote - $author";
+  }
+}
+
 class SimpleNotification {
   BuildContext context;
   late FlutterLocalNotificationsPlugin notification;
@@ -158,5 +175,33 @@ class SimpleNotification {
                 : payload == "Share"
                     ? const Text("Website information copied.")
                     : null));
+  }
+
+  Future<List<String>> getRandomQuote() async {
+    var url = Uri.http("https://type.fit/api", "/quotes");
+    var response = await get(url);
+    InspirationalQuote randomQuote;
+    List<String> output = [];
+
+    var data = jsonDecode(response.body);
+    List<InspirationalQuote> users = [];
+    for (var item in data) {
+      users.add(InspirationalQuote(item["text"], item["author"]));
+    }
+    randomQuote = users[Random().nextInt(users.length)];
+    output = [randomQuote.quote, randomQuote.author];
+
+    return output;
+  }
+
+  Future<String?> quoteNotification() async {
+    List<String> randQuote = await getRandomQuote();
+    String content = randQuote[0];
+    String author = randQuote[1];
+
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            AlertDialog(title: Text(content), content: Text(author)));
   }
 }
