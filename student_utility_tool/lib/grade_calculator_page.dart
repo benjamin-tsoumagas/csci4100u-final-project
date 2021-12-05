@@ -18,30 +18,38 @@ class GradeCalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: AppBar(
-                title: const Text("Grade Calculator"),
-                bottom: const TabBar(tabs: [
-                  Tab(
-                    text: "Grade",
-                  ),
-                  Tab(
-                    text: "Final Grade",
-                  ),
-                  Tab(
-                    text: "Description",
-                  ),
-                ]),
-              ),
-              body: TabBarView(children: [
-                _gradeCalculatorTab(context),
-                _finalGradeCalculatorTab(context),
-                _descriptionTab(context),
-              ]),
-              drawer: const NavigationDrawerWidget(),
-            )));
+      theme: ThemeData(primaryColor: Colors.purple),
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.purple,
+            title: const Text("Grade Calculator"),
+            bottom: const TabBar(
+              tabs: [
+                Tab(
+                  text: "Grade",
+                ),
+                Tab(
+                  text: "Final Grade",
+                ),
+                Tab(
+                  text: "Description",
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              _gradeCalculatorTab(context),
+              _finalGradeCalculatorTab(context),
+              _descriptionTab(context),
+            ],
+          ),
+          drawer: const NavigationDrawerWidget(),
+        ),
+      ),
+    );
   }
 
   _gradeCalculatorTab(BuildContext context) {
@@ -57,14 +65,20 @@ class GradeCalculatorPage extends StatelessWidget {
           ],
         ),
         Expanded(
-            child: Container(
-          padding: const EdgeInsets.all(20),
-          child: const Card(child: GradeCalculator()),
-        )),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: const Card(
+              child: GradeCalculator(),
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple),
+                ),
                 onPressed: () {
                   calculationResult = 0;
                   for (var controller in textControllers) {
@@ -78,6 +92,9 @@ class GradeCalculatorPage extends StatelessWidget {
                 },
                 child: const Text("Calculate")),
             ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.purple),
+                ),
                 onPressed: () {
                   for (var controller in textControllers) {
                     controller[0].clear();
@@ -98,36 +115,44 @@ class GradeCalculatorPage extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         Flexible(
-            child: Container(
-          padding: const EdgeInsets.all(20),
-          child: const FinalGradeCalculator(),
-        )),
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: const FinalGradeCalculator(),
+          ),
+        ),
         Flexible(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  currentGrade = double.parse(currentGradeController.text);
-                  targetClassGrade = double.parse(targetGradeController.text);
-                  finalExamWeight = double.parse(finalWeightController.text);
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.purple),
+                  ),
+                  onPressed: () {
+                    currentGrade = double.parse(currentGradeController.text);
+                    targetClassGrade = double.parse(targetGradeController.text);
+                    finalExamWeight = double.parse(finalWeightController.text);
 
-                  calculationResult = (targetClassGrade -
-                          ((1 - (finalExamWeight / 100)) * currentGrade)) /
-                      finalExamWeight;
-                  calculationResult = calculationResult * 100;
-                  _showAlertDialog(context);
-                },
-                child: const Text("Calculate")),
-            ElevatedButton(
-                onPressed: () {
-                  currentGradeController.clear();
-                  targetGradeController.clear();
-                  finalWeightController.clear();
-                },
-                child: const Text("Clear All"))
-          ],
-        )),
+                    calculationResult = (targetClassGrade -
+                            ((1 - (finalExamWeight / 100)) * currentGrade)) /
+                        finalExamWeight;
+                    calculationResult = calculationResult * 100;
+                    _showAlertDialog(context);
+                  },
+                  child: const Text("Calculate")),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.purple),
+                  ),
+                  onPressed: () {
+                    currentGradeController.clear();
+                    targetGradeController.clear();
+                    finalWeightController.clear();
+                  },
+                  child: const Text("Clear All"))
+            ],
+          ),
+        ),
         const SizedBox(height: 20),
       ],
     );
@@ -137,32 +162,45 @@ class GradeCalculatorPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: const [
+      children: [
         SizedBox(height: 20),
-        Text("Grade Calculator:", style: TextStyle(fontSize: 20)),
-        SizedBox(height: 10),
-        Text(
+        const Text(
+          "Grade Calculator:",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        Container(
+          padding: const EdgeInsets.only(
+              top: 10.0, left: 25.0, right: 25.0, bottom: 20.0),
+          child: const Text(
             "The grade calculator will provide your overall grade based on assignments, midterms, and final exam.",
-            style: TextStyle(fontSize: 17)),
-        SizedBox(height: 20),
-        Text("Final Grade Calculator:", style: TextStyle(fontSize: 20)),
-        SizedBox(height: 10),
-        Text(
+            style: TextStyle(color: Colors.black87, fontSize: 17.0),
+          ),
+        ),
+        const Text(
+          "Final Grade Calculator:",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        Container(
+          padding: const EdgeInsets.only(top: 10.0, left: 25.0, right: 25.0),
+          child: const Text(
             "The final grade calculator will calculate what grade you will need to get on the final exam to achieve a desired overall grade.",
-            style: TextStyle(fontSize: 17)),
+            style: TextStyle(color: Colors.black87, fontSize: 17.0),
+          ),
+        ),
       ],
     );
   }
 
   _showAlertDialog(BuildContext context) {
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Calculation Result"),
-            content: Text(calculationResult.toString()),
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Calculation Result"),
+          content: Text(calculationResult.toString()),
+        );
+      },
+    );
   }
 }
 
@@ -172,47 +210,57 @@ class GradeCalculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          List<TextEditingController> temp = [
-            TextEditingController(),
-            TextEditingController(),
-            TextEditingController()
-          ];
-          textControllers.add(temp);
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        List<TextEditingController> temp = [
+          TextEditingController(),
+          TextEditingController(),
+          TextEditingController(),
+        ];
+        textControllers.add(temp);
 
-          return Column(
-            children: [
-              Row(
-                children: [
-                  const SizedBox(width: 10),
-                  Flexible(
-                      flex: 2,
-                      child: TextField(
-                          controller: textControllers[index][0],
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()))),
-                  const SizedBox(width: 10),
-                  Flexible(
-                      child: TextField(
-                          controller: textControllers[index][1],
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()))),
-                  const SizedBox(width: 10),
-                  Flexible(
-                      child: TextField(
-                          controller: textControllers[index][2],
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()))),
-                  const SizedBox(width: 10),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          );
-        });
+        return Column(
+          children: [
+            Row(
+              children: [
+                const SizedBox(width: 10),
+                Flexible(
+                  flex: 2,
+                  child: TextField(
+                    controller: textControllers[index][0],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Flexible(
+                  child: TextField(
+                    controller: textControllers[index][1],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Flexible(
+                  child: TextField(
+                    controller: textControllers[index][2],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -230,26 +278,36 @@ class _FinalGradeCalculatorState extends State<FinalGradeCalculator> {
       children: [
         const SizedBox(height: 10),
         Flexible(
-            child: TextField(
-          controller: currentGradeController,
-          decoration: const InputDecoration(
-              labelText: "Current Grade", border: OutlineInputBorder()),
-        )),
+          child: TextField(
+            controller: currentGradeController,
+            decoration: const InputDecoration(
+              labelText: "Current Grade",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
         const SizedBox(height: 20),
         Flexible(
-            child: TextField(
-          controller: targetGradeController,
-          decoration: const InputDecoration(
-              labelText: "Target Grade", border: OutlineInputBorder()),
-        )),
+          child: TextField(
+            controller: targetGradeController,
+            decoration: const InputDecoration(
+              labelText: "Target Grade",
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
         const SizedBox(height: 20),
         Flexible(
-            child: Flexible(
-                child: TextField(
-          controller: finalWeightController,
-          decoration: const InputDecoration(
-              labelText: "Final Exam Weight", border: OutlineInputBorder()),
-        ))),
+          child: Flexible(
+            child: TextField(
+              controller: finalWeightController,
+              decoration: const InputDecoration(
+                labelText: "Final Exam Weight",
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

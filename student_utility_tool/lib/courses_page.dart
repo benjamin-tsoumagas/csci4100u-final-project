@@ -116,13 +116,13 @@ class _CourseListState extends State<CoursesPage> {
         allAssigns.add(GradePerAssesment());
       }
       allAssigns = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CourseInputPage(),
+          builder: (context) => const CourseInputPage(),
           settings: RouteSettings(arguments: allAssigns)));
     } else {
       courseName = await getCourseNamePopup(context, null);
       if (courseName != null) {
-        allAssigns = await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CourseInputPage()));
+        allAssigns = await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const CourseInputPage()));
       }
     }
 

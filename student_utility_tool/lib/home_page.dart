@@ -45,14 +45,12 @@ class HomePage extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 25,
             )),
-        const SizedBox(height: 10),
-        Text("2000 Simcoe St N, Oshawa, ON L1G 0C5",
-            style:
-                TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 18)),
-        const SizedBox(height: 50),
-        const Text(
-          "The University of Ontario Institute of Technology, corporately branded as Ontario Tech University or Ontario Tech, is a public research university located in Oshawa, Ontario, Canada. Ontario Tech's main campus is located on approximately 400 acres of land in the northern part of Oshawa.",
-          style: TextStyle(fontSize: 18),
+        Container(
+          padding: const EdgeInsets.only(top: 20.0, left: 25.0, right: 25.0),
+          child: const Text(
+            "The University of Ontario Institute of Technology, corporately branded as Ontario Tech University or Ontario Tech, is a public research university located in Oshawa, Ontario, Canada. Ontario Tech's main campus is located on approximately 400 acres of land in the northern part of Oshawa.",
+            style: TextStyle(color: Colors.black87, fontSize: 18.0),
+          ),
         ),
       ],
     );
