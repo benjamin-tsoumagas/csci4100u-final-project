@@ -377,10 +377,8 @@ class CourseInputState extends State<CourseInputPage> {
                                         onPressed: () {
                                           if (data != null) {
                                             grades.remove(data);
-                                            Navigator.pop(context);
-                                          } else {
-                                            Navigator.pop(context, data);
                                           }
+                                          Navigator.pop(context);
                                         },
                                         child: Text(otherActionText)),
                                   ),
@@ -555,7 +553,7 @@ class CourseInputState extends State<CourseInputPage> {
                           child: Center(
                             child: IconButton(
                               onPressed: () async {
-                                gradesInputPopup(grades[index - 1]);
+                                await gradesInputPopup(grades[index - 1]);
                                 setState(() {});
                               },
                               icon: const Icon(
