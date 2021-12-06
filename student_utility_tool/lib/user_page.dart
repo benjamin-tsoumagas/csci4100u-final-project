@@ -58,8 +58,8 @@ class _UserPageState extends State<UserPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        padding:
-                            const EdgeInsets.only(top: 5, left: 20, right: 20),
+                        padding: const EdgeInsets.only(
+                            top: 5, left: 20, right: 20, bottom: 5),
                         child: TextFormField(
                           controller: emailController,
                           decoration: const InputDecoration(labelText: "Email"),

@@ -178,7 +178,7 @@ class SimpleNotification {
   }
 
   Future<List<String>> getRandomQuote() async {
-    var url = Uri.http("https://type.fit/api", "/quotes");
+    var url = Uri.parse("https://type.fit/api/quotes");
     var response = await get(url);
     InspirationalQuote randomQuote;
     List<String> output = [];
@@ -201,7 +201,7 @@ class SimpleNotification {
 
     await showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            AlertDialog(title: Text(content), content: Text(author)));
+        builder: (BuildContext context) => AlertDialog(
+            title: Text("\"$content\""), content: Text("-$author-")));
   }
 }
