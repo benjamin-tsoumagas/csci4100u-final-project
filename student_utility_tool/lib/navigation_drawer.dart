@@ -99,6 +99,7 @@ class NavigationDrawerWidget extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.edit),
             title: const Text("Edit Profile"),
+            trailing: const Icon(Icons.chevron_right),
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
