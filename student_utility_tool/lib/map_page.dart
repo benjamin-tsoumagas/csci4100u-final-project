@@ -54,6 +54,19 @@ class _MapPageState extends State<MapPage> {
               'id': 'mapbox.mapbox-streets-v8'
             },
           ),
+          PolylineLayerOptions(
+            polylines: [
+              if (locations.isNotEmpty)
+                Polyline(
+                  color: Colors.purple,
+                  strokeWidth: 2.0,
+                  points: [
+                    center,
+                    locations[0],
+                  ],
+                )
+            ],
+          ),
           MarkerLayerOptions(
               markers: [
                     Marker(
@@ -86,19 +99,6 @@ class _MapPageState extends State<MapPage> {
                             );
                           })
                   ]),
-          PolylineLayerOptions(
-            polylines: [
-              if (locations.isNotEmpty)
-                Polyline(
-                  color: Colors.purple,
-                  strokeWidth: 2.0,
-                  points: [
-                    center,
-                    locations[0],
-                  ],
-                )
-            ],
-          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
