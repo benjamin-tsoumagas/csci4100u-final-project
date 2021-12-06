@@ -7,17 +7,17 @@ This application was designed intended for students at Ontario Tech University t
 ## Features
 
 ### Home page along with many other built in features.
-![Screenshot](/csci4100u-final-project/screen_shots/HomeScreen.png)
+![HomeScreen](/screen_shots/HomeScreen.png)
 
-![Screenshot](/csci4100u-final-project/screen_shots/Drawer.png)
+![Screenshot](/screen_shots/Drawer.png)
 
 ### Course Management.
-![Screenshot](/csci4100u-final-project/screen_shots/Courses.png)
+![Screenshot](/screen_shots/Courses.png)
 
-![Screenshot](/csci4100u-final-project/screen_shots/Acessment.png)
+![Screenshot](/screen_shots/Acessment.png)
 
 ### Student Map.
-![Screenshot](/csci4100u-final-project/screen_shots/map.png)
+![Screenshot](//screen_shots/map.png)
 
 ### Grade Calculator
-![Screenshot](/csci4100u-final-project/screen_shots/Calculator.png)
+![Screenshot](/screen_shots/Calculator.png)
