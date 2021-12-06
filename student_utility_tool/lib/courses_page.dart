@@ -112,16 +112,20 @@ class _CourseListState extends State<CoursesPage> {
         return null;
       }
       allAssigns = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const CourseInputPage(),
-      ));
+          builder: (context) => CourseInputPage(
+                courseName: courseName,
+              )));
     } else {
       courseName = await getCourseNamePopup(context, data['courseName']);
       if (courseName == null) {
         return null;
       }
       allAssigns = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const CourseInputPage(),
-          settings: RouteSettings(arguments: data['courseName'])));
+        builder: (context) => CourseInputPage(
+          courseName: courseName,
+          data: data,
+        ),
+      ));
     }
 
     // creating 3 lists of data for storing
@@ -253,8 +257,9 @@ class _CourseListState extends State<CoursesPage> {
 ///////////////////////////////////////////////////////////////////////////////
 
 class CourseInputPage extends StatefulWidget {
-  const CourseInputPage({Key key, this.courseName}) : super(key: key);
-  final String courseName;
+  CourseInputPage({Key key, this.courseName, this.data}) : super(key: key);
+  String courseName = 'Grades';
+  Map<String, dynamic> data;
 
   @override
   State<StatefulWidget> createState() => CourseInputState();
@@ -372,10 +377,8 @@ class CourseInputState extends State<CourseInputPage> {
                                         onPressed: () {
                                           if (data != null) {
                                             grades.remove(data);
-                                            Navigator.pop(context);
-                                          } else {
-                                            Navigator.pop(context, data);
                                           }
+                                          Navigator.pop(context);
                                         },
                                         child: Text(otherActionText)),
                                   ),
@@ -420,19 +423,21 @@ class CourseInputState extends State<CourseInputPage> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
-    /*for (int i; i < data['assignNames'].length; i++) {
-      GradePerAssesment newGrade = GradePerAssesment();
-      newGrade.name = data['assignNames'][i];
-      newGrade.weight = double.parse(data['weights'][i]);
-      newGrade.grade = double.parse(data['grades'][i]);
-      allAssigns.add(GradePerAssesment());
-    }*/
+    if (widget.data != null) {
+      //print(widget.data.toString());
+      for (int i = 0; i < widget.data['assignNames'].length; i++) {
+        GradePerAssesment newGrade = GradePerAssesment();
+        newGrade.name = widget.data['assignNames'][i];
+        newGrade.weight = widget.data['weights'][i];
+        newGrade.grade = widget.data['grades'][i];
+        grades.add(newGrade);
+      }
+    }
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: const Text("Grades"),
+          title: Text(widget.courseName),
           backgroundColor: Colors.purple,
           actions: [
             IconButton(
@@ -548,8 +553,7 @@ class CourseInputState extends State<CourseInputPage> {
                           child: Center(
                             child: IconButton(
                               onPressed: () async {
-                                var newGradeData =
-                                    gradesInputPopup(grades[index - 1]);
+                                await gradesInputPopup(grades[index - 1]);
                                 setState(() {});
                               },
                               icon: const Icon(
