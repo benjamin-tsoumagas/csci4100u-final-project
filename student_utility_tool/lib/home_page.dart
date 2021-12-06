@@ -17,16 +17,18 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       //make the appBar an online picture of the university
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(300.0),
-          child: AppBar(
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          "https://www.edgeip.com/images/FCK/Image/201908/20-OntarioTech-Get-to-Know-Our-Community-SIC.jpg"),
-                      fit: BoxFit.fitHeight)),
+        preferredSize: const Size.fromHeight(300.0),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(
+                      "https://www.edgeip.com/images/FCK/Image/201908/20-OntarioTech-Get-to-Know-Our-Community-SIC.jpg"),
+                  fit: BoxFit.fitHeight),
             ),
-          )),
+          ),
+        ),
+      ),
       body: columnWidget(context),
       //left-hanging drawer with options for the student
       drawer: const NavigationDrawerWidget(),
@@ -181,14 +183,15 @@ class SimpleNotification {
   //notification for either phone number or website url
   Future<String?> selectNotification(String? payload) async {
     await showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-            title: Text("$payload Clicked"),
-            content: payload == "Call"
-                ? const Text("Phone number copied.")
-                : payload == "Share"
-                    ? const Text("Website information copied.")
-                    : null));
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+          title: Text("$payload Clicked"),
+          content: payload == "Call"
+              ? const Text("Phone number copied.")
+              : payload == "Share"
+                  ? const Text("Website information copied.")
+                  : null),
+    );
   }
 
   //gets a random quote from the API given using HTTP requests
@@ -201,7 +204,12 @@ class SimpleNotification {
     var data = jsonDecode(response.body);
     List<InspirationalQuote> users = [];
     for (var item in data) {
-      users.add(InspirationalQuote(item["text"], item["author"]));
+      users.add(
+        InspirationalQuote(
+          item["text"],
+          item["author"],
+        ),
+      );
     }
     //picks a random quote from a list of quotes
     randomQuote = users[Random().nextInt(users.length)];
@@ -217,8 +225,11 @@ class SimpleNotification {
     String author = randQuote[1];
 
     await showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-            title: Text("\"$content\""), content: Text("-$author-")));
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text("\"$content\""),
+        content: Text("-$author-"),
+      ),
+    );
   }
 }

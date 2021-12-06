@@ -146,6 +146,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  // Dialog for editing username
   editUsernameDialog(TextEditingController usernameController) {
     return showDialog(
       context: context,
@@ -229,6 +230,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  // Dialog for editing password
   editPasswordDialog(TextEditingController passwordController) {
     TextEditingController oldPasswordController = TextEditingController();
     bool isObscure = true;

@@ -174,6 +174,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  // Dialog for error with wrong email or password input
   showErrorDialog(BuildContext context) {
     return showDialog(
       context: context,
@@ -194,6 +195,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
+  // Dialog for creating account
   registerDialog(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     TextEditingController usernameController = TextEditingController();

@@ -68,37 +68,40 @@ class _MapPageState extends State<MapPage> {
             ],
           ),
           MarkerLayerOptions(
-              markers: [
+            markers: [
+                  Marker(
+                    point: center,
+                    builder: (BuildContext context) {
+                      return IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return bottomSheet();
+                              });
+                        },
+                        icon: const Icon(Icons.location_on),
+                        iconSize: 30.0,
+                        color: Colors.purple,
+                      );
+                    },
+                  ),
+                ] +
+                [
+                  for (var i = 0; i < locations.length; i++)
                     Marker(
-                        point: center,
-                        builder: (BuildContext context) {
-                          return IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return bottomSheet();
-                                  });
-                            },
-                            icon: const Icon(Icons.location_on),
-                            iconSize: 30.0,
-                            color: Colors.purple,
-                          );
-                        }),
-                  ] +
-                  [
-                    for (var i = 0; i < locations.length; i++)
-                      Marker(
-                          point: locations[i],
-                          builder: (BuildContext context) {
-                            return IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.circle),
-                              iconSize: 20.0,
-                              color: Colors.purple,
-                            );
-                          })
-                  ]),
+                      point: locations[i],
+                      builder: (BuildContext context) {
+                        return IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.circle),
+                          iconSize: 20.0,
+                          color: Colors.purple,
+                        );
+                      },
+                    )
+                ],
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -122,6 +125,7 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  // Get current location
   Future<Position> checkPermissions() async {
     LocationPermission permission;
 
@@ -133,6 +137,7 @@ class _MapPageState extends State<MapPage> {
         desiredAccuracy: LocationAccuracy.best);
   }
 
+  // BottomSheet of marker when clicked
   Widget bottomSheet() {
     return Column(
       children: [
