@@ -15,6 +15,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //make the appBar an online picture of the university
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(300.0),
           child: AppBar(
@@ -27,7 +28,9 @@ class HomePage extends StatelessWidget {
             ),
           )),
       body: columnWidget(context),
+      //left-hanging drawer with options for the student
       drawer: const NavigationDrawerWidget(),
+      //button to get a random inspirational quote as a notification
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
         onPressed: () {
@@ -38,12 +41,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  //contains university name, phone number, address, and website url
   Widget columnWidget(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          //university name
           const SizedBox(height: 30),
           const Text(
             "Ontario Tech University",
@@ -57,6 +62,7 @@ class HomePage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                //button to copy university phone number to clipboard
                 Column(
                   children: [
                     IconButton(
@@ -78,6 +84,7 @@ class HomePage extends StatelessWidget {
                     )
                   ],
                 ),
+                //button to navigate from current location to university
                 Column(
                   children: [
                     IconButton(
@@ -101,6 +108,7 @@ class HomePage extends StatelessWidget {
                     )
                   ],
                 ),
+                //button to copy university website link to clipboard
                 Column(
                   children: [
                     IconButton(
@@ -132,6 +140,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
+//class to store inspirational quote information
 class InspirationalQuote {
   String quote;
   String author;
@@ -144,10 +153,12 @@ class InspirationalQuote {
   }
 }
 
+//class used for notifications
 class SimpleNotification {
   BuildContext context;
   late FlutterLocalNotificationsPlugin notification;
 
+  //class constructor
   SimpleNotification(this.context) {
     initNotification();
   }
@@ -167,6 +178,7 @@ class SimpleNotification {
         onSelectNotification: selectNotification);
   }
 
+  //notification for either phone number or website url
   Future<String?> selectNotification(String? payload) async {
     await showDialog(
         context: context,
@@ -179,6 +191,7 @@ class SimpleNotification {
                     : null));
   }
 
+  //gets a random quote from the API given using HTTP requests
   Future<List<String>> getRandomQuote() async {
     var url = Uri.parse("https://type.fit/api/quotes");
     var response = await get(url);
@@ -190,12 +203,14 @@ class SimpleNotification {
     for (var item in data) {
       users.add(InspirationalQuote(item["text"], item["author"]));
     }
+    //picks a random quote from a list of quotes
     randomQuote = users[Random().nextInt(users.length)];
     output = [randomQuote.quote, randomQuote.author];
 
     return output;
   }
 
+  //notification with a random quote
   Future<String?> quoteNotification() async {
     List<String> randQuote = await getRandomQuote();
     String content = randQuote[0];

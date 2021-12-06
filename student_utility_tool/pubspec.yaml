@@ -43,6 +43,7 @@ dependencies:
     geocoding:
     http:
     flutter_local_notifications:
+    camera:
 
 dev_dependencies:
     flutter_test:
