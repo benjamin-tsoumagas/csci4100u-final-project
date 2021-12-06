@@ -1,3 +1,5 @@
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'map_page.dart';
@@ -154,9 +156,9 @@ class SimpleNotification {
   initNotification() {
     notification = FlutterLocalNotificationsPlugin();
     AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     IOSInitializationSettings iOSInitializationSettings =
-        IOSInitializationSettings();
+        const IOSInitializationSettings();
 
     InitializationSettings initializationSettings = InitializationSettings(
         android: androidInitializationSettings, iOS: iOSInitializationSettings);

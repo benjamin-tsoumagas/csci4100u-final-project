@@ -50,7 +50,7 @@ class _UserPageState extends State<UserPage> {
                   right: 15),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width - 30,
-                height: MediaQuery.of(context).size.height / 4,
+                height: MediaQuery.of(context).size.height / 2,
                 child: Form(
                   key: formKey,
                   child: Column(
