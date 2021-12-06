@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:student_utility_tool/navigation_drawer.dart';
 
-// Global Variable
+/// Controllers for the textfields within the grade calculator tab.
 final List<List<TextEditingController>> textControllers = [];
+
+/// Parameters used to calculate the final grade within the final grade calculator tab.
 double currentGrade = 0;
 double targetClassGrade = 0;
 double finalExamWeight = 0;
+
+/// Controllers for the textfields within final grade calculator tab.
 final currentGradeController = TextEditingController();
 final targetGradeController = TextEditingController();
 final finalWeightController = TextEditingController();
@@ -52,6 +56,7 @@ class GradeCalculatorPage extends StatelessWidget {
     );
   }
 
+  /// Grade Tab within the grade controller.
   _gradeCalculatorTab(BuildContext context) {
     return Column(
       children: [
@@ -110,6 +115,7 @@ class GradeCalculatorPage extends StatelessWidget {
     );
   }
 
+  /// Fianl Grade tab within the grade calculator.
   _finalGradeCalculatorTab(BuildContext context) {
     return Column(
       children: [
@@ -158,6 +164,7 @@ class GradeCalculatorPage extends StatelessWidget {
     );
   }
 
+  /// Description tab within the grade calculator.
   _descriptionTab(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -191,6 +198,7 @@ class GradeCalculatorPage extends StatelessWidget {
     );
   }
 
+  /// displays the result once calculate button is presssed.
   _showAlertDialog(BuildContext context) {
     return showDialog(
       context: context,
@@ -204,6 +212,7 @@ class GradeCalculatorPage extends StatelessWidget {
   }
 }
 
+/// Listview within the card widget.
 class GradeCalculator extends StatelessWidget {
   const GradeCalculator({Key? key}) : super(key: key);
 
@@ -264,6 +273,7 @@ class GradeCalculator extends StatelessWidget {
   }
 }
 
+/// Widgets used for user input within the final grade tab.
 class FinalGradeCalculator extends StatefulWidget {
   const FinalGradeCalculator({Key? key}) : super(key: key);
 

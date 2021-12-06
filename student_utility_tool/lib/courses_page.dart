@@ -256,6 +256,7 @@ class _CourseListState extends State<CoursesPage> {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// ignore: must_be_immutable
 class CourseInputPage extends StatefulWidget {
   CourseInputPage({Key key, this.courseName, this.data}) : super(key: key);
   String courseName = 'Grades';
