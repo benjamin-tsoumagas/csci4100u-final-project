@@ -17,7 +17,7 @@ This application was designed intended for students at Ontario Tech University t
 ![Screenshot](/screen_shots/Acessment.png)
 
 ### Student Map.
-![Screenshot](//screen_shots/map.png)
+![Screenshot](/screen_shots/map.png)
 
 ### Grade Calculator
 ![Screenshot](/screen_shots/Calculator.png)
