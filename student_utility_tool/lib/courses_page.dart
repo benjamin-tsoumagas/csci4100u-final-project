@@ -171,7 +171,10 @@ class _CourseListState extends State<CoursesPage> {
             int colourDiff = 50;
             int colourShift = 50;
 
-            int listSize = snapshot.data.length;
+            int listSize = 0;
+            if (snapshot.hasData) {
+              listSize = snapshot.data.length;
+            }
 
             return snapshot.hasData
                 ? ListView.builder(
